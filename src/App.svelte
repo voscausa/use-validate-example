@@ -9,7 +9,7 @@
   let { name, experience, html, css, js, jsSkills } = defaults;
 
   function reset() {
-    ({ name, experience, html, css, js, jsSkill } = defaults);
+    ({ name, experience, html, css, js, jsSkills } = defaults);
   }
 
   const rulesConfig = {
