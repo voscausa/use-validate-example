@@ -38,23 +38,25 @@
     css: "get", // get bool
     js: "jsSkills", // if js we rquire jsSkills
     jsSkills: "required",
-    other: "get",
+    other: "get", // get but not required
   };
 
-  $: if (!html) css = false;
-  $: if (!js) jsSkills = "";
+  // reset optional fields
+  $: if (!html) css = defaults.css;
+  $: if (!js) jsSkills = defaults.jsSkills;
 
-  const notValidMarkers = {};
+  const notValidMarkers = {}; // not used
   // initialize the validation instance with node.name as the default id
   const { field, OK, addValidator, fieldValues, runRuleChain } = validate(
     { rulesConfig },
+    // callback not used
     (id, notValid, value) => {
       // callback to update bindings or signal notValid components
       if (id in notValidMarkers) notValidMarkers[id] = notValid;
     }
   );
 
-  // alt rulechain selection to validate an optional jsSkills
+  // alt rulechain selection to validate optional required jsSkills
   addValidator("jsSkills", function () {
     runRuleChain.jsSkills(
       // require skill for js
@@ -65,10 +67,10 @@
   });
 
   function commitForm() {
-    console.log("commit");
+    console.log("submit: check all rules using OK()");
     submitOK = OK();
     if (submitOK) {
-      console.log("validation result", fieldValues);
+      console.log("validation OK result", fieldValues);
     }
     return false;
   }
@@ -159,7 +161,7 @@
 </form>
 
 <style>
-  /* basic styles more: https://www.sitepoint.com/css-grid-web-form-layout/ */
+  /* adapted grid styles from: https://www.sitepoint.com/css-grid-web-form-layout/ */
   input,
   textarea,
   select,
