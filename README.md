@@ -7,15 +7,18 @@ Example use of: svelte-use-validate
 
 ```js
 const rulesConfig = {
+  day: ["required", { range: { min: 1, max: 31 } }, "dayOk"],
+  month: ["required", { range: { min: 1, max: 12 } }],
   name: [
     "required",
     { len: { operator: ">=", len: 3, msg: "length must be at least 3 characters" } },
   ],
   experience: "required",
-  html: "get",      // if html we require css
-  css: "get",       // get bool
-  js: "jsSkills",   // if js we rquire jsSkills
+  html: "get", // if html we require css
+  css: "get", // get bool
+  js: "jsSkills", // if js we rquire jsSkills
   jsSkills: "required",
+  other: "get", // not required
 };
 ```
 
