@@ -4,15 +4,31 @@
   export let packageJson = { name: "project name", version: "0.0.0" };
   console.log(packageJson);
 
+  let submitOK = false;
+  const year = new Date().getFullYear();
+
   // field value defaults
-  let defaults = { name: "", experience: "", html: false, css: false, js: false, jsSkills: "" };
-  let { name, experience, html, css, js, jsSkills } = defaults;
+  let defaults = {
+    day: "",
+    month: "",
+    name: "",
+    experience: "",
+    html: false,
+    css: false,
+    js: false,
+    jsSkills: "",
+    other: "",
+  };
+  let { day, month, name, experience, html, css, js, jsSkills, other } = defaults;
 
   function reset() {
-    ({ name, experience, html, css, js, jsSkills } = defaults);
+    ({ day, month, name, experience, html, css, js, jsSkills, other } = defaults);
+    submitOK = false;
   }
 
   const rulesConfig = {
+    day: ["required", { range: { min: 1, max: 31 } }, "dayOk"],
+    month: ["required", { range: { min: 1, max: 12 } }],
     name: [
       "required",
       { len: { operator: ">=", len: 3, msg: "length must be at least 3 characters" } },
@@ -22,6 +38,7 @@
     css: "get", // get bool
     js: "jsSkills", // if js we rquire jsSkills
     jsSkills: "required",
+    other: "get",
   };
 
   $: if (!html) css = false;
@@ -49,7 +66,8 @@
 
   function commitForm() {
     console.log("commit");
-    if (OK()) {
+    submitOK = OK();
+    if (submitOK) {
       console.log("validation result", fieldValues);
     }
     return false;
@@ -58,9 +76,33 @@
 
 <form id="myform" action="get">
   <fieldset>
-    <legend><h3>Use Validation Example</h3></legend>
+    <legend><h3>Svelte Use Validation Example</h3></legend>
 
     <div class="formgrid">
+      <div class="sub-inputs">
+        <input
+          class="center"
+          id="day"
+          size="1"
+          name="day"
+          type="text"
+          use:field={{ value: day, controls: [year, month] }}
+          bind:value={day}
+          placeholder="dd" />
+        -
+        <input
+          class="center"
+          id="month"
+          size="1"
+          name="month"
+          type="text"
+          use:field={month}
+          bind:value={month}
+          placeholder="mm" />
+        - {year}
+      </div>
+      <div class="label">date</div>
+
       <input id="name" name="name" type="text" use:field={name} bind:value={name} />
       <label for="name">name</label>
 
@@ -101,12 +143,16 @@
       </select>
       <label for="experience">JavaScript skills</label>
 
-      <textarea id="other" name="other" rows="3" cols="20" />
+      <textarea id="other" name="other" rows="3" cols="20" use:field={other} bind:value={other} />
       <label for="other">other skills</label>
 
-      <div class="button-bar">
+      <div class="sub-inputs">
         <button type="submit" on:click|preventDefault={commitForm}>SUBMIT</button>
         <button type="reset" class="float-right" on:click|preventDefault={reset}>RESET</button>
+      </div>
+      <div class="label">form</div>
+      <div class:submit-nok={!submitOK} class="sub-inputs center">
+        <b>Submit OK: console logs validated fieldValues</b>
       </div>
     </div>
   </fieldset>
@@ -119,7 +165,8 @@
   select,
   option,
   button,
-  label {
+  label,
+  .label {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
       "Droid Sans", "Helvetica Neue", sans-serif;
     font-size: 100%;
@@ -163,12 +210,14 @@
     cursor: pointer;
   }
 
-  label {
+  label,
+  .label {
     box-sizing: border-box;
     user-select: none;
     cursor: pointer;
   }
 
+  .sub-inputs:focus-within + .label,
   input:focus + label,
   textarea:focus + label,
   select:focus + label {
@@ -183,8 +232,16 @@
     float: right !important;
   }
 
+  .center {
+    text-align: center;
+  }
+
   .hidden {
     visibility: hidden;
+  }
+
+  .submit-nok {
+    color: red;
   }
 
   /* grid layout */
@@ -199,7 +256,7 @@
   input,
   textarea,
   select,
-  .button-bar {
+  .sub-inputs {
     grid-column: 2 / 4;
     width: auto;
     margin: 0;
@@ -207,6 +264,7 @@
 
   input[type="checkbox"],
   label,
+  .label,
   input[type="checkbox"] + label,
   textarea + label {
     align-self: start;
