@@ -8,7 +8,7 @@
   const year = new Date().getFullYear();
 
   // field value defaults
-  let defaults = {
+  let defaults = Object.freeze({
     day: "",
     month: "",
     name: "",
@@ -18,7 +18,8 @@
     js: false,
     jsSkills: "",
     other: "",
-  };
+  });
+
   let { day, month, name, experience, html, css, js, jsSkills, other } = defaults;
 
   function reset() {
@@ -81,7 +82,7 @@
     <legend><h3>Svelte Use Validation Example</h3></legend>
 
     <div class="formgrid">
-      <div class="sub-inputs">
+      <div class="bar-inputs">
         <input
           class="center"
           id="day"
@@ -148,12 +149,12 @@
       <textarea id="other" name="other" rows="3" cols="20" use:field={other} bind:value={other} />
       <label for="other">other skills</label>
 
-      <div class="sub-inputs">
+      <div class="bar-inputs">
         <button type="submit" on:click|preventDefault={commitForm}>SUBMIT</button>
         <button type="reset" class="float-right" on:click|preventDefault={reset}>RESET</button>
       </div>
       <div class="label">form</div>
-      <div class:submit-nok={!submitOK} class="sub-inputs center">
+      <div class:submit-nok={!submitOK} class="bar-inputs center">
         <b>Submit OK: console logs validated fieldValues</b>
       </div>
     </div>
@@ -219,7 +220,7 @@
     cursor: pointer;
   }
 
-  .sub-inputs:focus-within + .label,
+  .bar-inputs:focus-within + .label,
   input:focus + label,
   textarea:focus + label,
   select:focus + label {
@@ -258,7 +259,7 @@
   input,
   textarea,
   select,
-  .sub-inputs {
+  .bar-inputs {
     grid-column: 2 / 4;
     width: auto;
     margin: 0;
@@ -269,6 +270,6 @@
   .label,
   input[type="checkbox"] + label,
   textarea + label {
-    align-self: start;
+    align-self: center;
   }
 </style>
