@@ -3,6 +3,8 @@
 A Svelte-Vite SPA to validate an example form
 Example use of: svelte-use-validate
 
+![example](./assets/example%20form.png)
+
 ### <b>Example config rules</b>
 
 ```js
