@@ -62,3 +62,33 @@ addValidator("updateJsSkillRules", function () {
   return false;
 });
 ```
+### <b>Example "date" HTML snippet</b>
+
+```html
+<div class="formgrid">
+  <div class="bar-inputs">
+    <input
+      class="center"
+      id="day"
+      size="1"
+      name="day"
+      type="text"
+      use:field={{ value: day, controls: [year, month] }}
+      bind:value={day}
+      placeholder="dd" />
+    -
+    <input
+      class="center"
+      id="month"
+      size="1"
+      name="month"
+      type="text"
+      use:field={month}
+      bind:value={month}
+      placeholder="mm" />
+    - {year}
+  </div>
+  <div class="label">date</div>
+  ...
+</div>  
+```
